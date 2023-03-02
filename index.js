@@ -1,39 +1,31 @@
 const { createStore, applyMiddleware } = require("redux");
-const { delayActionMiddleware } = require("./middlewares");
+const { fetchingTodoMiddleware } = require("./middlewares");
 
-// Initial State
+// Step 01: Initial State Define
 const initialState = {
   todos: [],
 };
 
-// Create Reducer
+// Step 02: Create Redcuer
 const todoReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "todos/todoAdded":
-      return {
-        ...state,
-        todos: [...state.todos, { title: action.payload }],
-      };
     case "todos/todoLoaded":
       return {
         ...state,
         todos: [...state.todos, ...action.payload],
       };
-    default:
-      return state;
   }
 };
 
-// Craete Store
-const store = createStore(todoReducer, applyMiddleware(delayActionMiddleware));
+// Step 03: Create Store
+const store = createStore(todoReducer, applyMiddleware(fetchingTodoMiddleware));
 
-// Subscribe to state change
+// Step 04: Subscribe to state change
 store.subscribe(() => {
   console.log(store.getState());
 });
 
-// Dispatch Actions
+// Step 05: Dispatch Action
 store.dispatch({
-  type: "todos/todoAdded",
-  payload: "How to learn Redux",
+  type: "todos/fetchDispatch",
 });
